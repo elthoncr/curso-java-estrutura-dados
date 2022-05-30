@@ -32,12 +32,48 @@ public class Vetor {
 	}*/
 	
 	public boolean adiciona(String elemento) {
+		this.aumentaCapacidade();
 		if(this.tamanho < this.elementos.length) {
 			this.elementos[this.tamanho] = elemento;
 			this.tamanho++;
 			return true;
 		} 
 		return false;
+	}
+	
+	
+	// 0 1 2 3 4 5 6 = tamanho é 5
+	// B C E F G + +
+	public boolean adiciona(int posicao, String elemento) {
+		
+		//Verifica se a posição é inválida, ou seja, se ela NÃO existe no vetor.
+		//Exemplo: adiciona(1, elemento 50) -> não vai entrar neste if.
+		//adiciona(50, elemento 50) -> Se a posição 50 não for válida vai entrar neste if.
+		if (!(posicao >= 0 && posicao < tamanho)) {
+			throw new IllegalArgumentException("Posição Inválida");
+		}
+		
+		this.aumentaCapacidade();
+		
+		//mover todos os elementos
+		for (int i = this.tamanho-1; i>=posicao; i--) {
+			this.elementos[i+1] = this.elementos[i];
+		}
+		
+		this.elementos[posicao] = elemento;
+		this.tamanho++;
+		
+		return true;
+	}
+	
+	public void aumentaCapacidade() {
+		if (this.tamanho == this.elementos.length) {
+			String[] elementosNovos = new String[this.elementos.length * 2];
+			for (int i=0; i<this.elementos.length; i++) {
+				elementosNovos[i] = this.elementos[i];
+			}
+			this.elementos = elementosNovos;
+		}
 	}
 	
 	public String busca(int posicao) {
@@ -54,6 +90,24 @@ public class Vetor {
 			}
 		}
 		return -1;
+	}
+	
+	// B G D E F -> Posição a ser removida é 1 (G)
+	// 0 1 2 3 4 -> Tamanho é 5
+	// vetor[1] = vetor[2]
+	// vetor[2] = vetor[3]
+	// vetor[3] = vetor[4]
+	public void remove(int posicao) {
+		if (!(posicao >= 0 && posicao < tamanho)) {
+			throw new IllegalArgumentException("Posição Inválida");
+		}
+
+		for (int i = posicao; i < this.tamanho-1; i++) {
+			this.elementos[i] = this.elementos[i+1];
+		}
+		
+		this.tamanho--;
+		
 	}
 	
 	public int tamanho() {
